@@ -1,5 +1,6 @@
 package com.runaumov.spring.controller;
 
+import com.runaumov.spring.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ public class LoginController {
 
     @GetMapping
     public String showLoginPage(Model model) {
-        model.addAttribute()
+        model.addAttribute("user", new User());
         return "login";
     }
 
