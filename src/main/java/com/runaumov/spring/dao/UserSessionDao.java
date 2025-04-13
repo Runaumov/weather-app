@@ -26,21 +26,10 @@ public class UserSessionDao implements iDao<UserSession, UUID> {
     @Override
     public Optional<UserSession> findById(UUID uuid) {
         try (Session session = sessionFactory.openSession()) {
-            UserSession userSession = session.createQuery("SELECT us FROM UserSession us JOIN FETCH us.user WHERE us.id = :uuid",
-                            UserSession.class)
+            UserSession userSession = session.createQuery("SELECT us FROM UserSession us " +
+                                    "LEFT JOIN FETCH us.user WHERE us.id = :uuid", UserSession.class)
                     .setParameter("uuid", uuid)
                     .uniqueResult();
-            return Optional.ofNullable(userSession);
-        }
-    }
-
-    public Optional<UserSession> findSessionByIdWithUser(UUID sessionId) {
-        try (Session session = sessionFactory.openSession()) {
-            UserSession userSession = session.createQuery("SELECT us FROM UserSession us "+
-                            "LEFT JOIN FETCH us.user WHERE us.id = :uuid",UserSession.class)
-                    .setParameter("uuid", sessionId)
-                    .uniqueResult();
-
             return Optional.ofNullable(userSession);
         }
     }

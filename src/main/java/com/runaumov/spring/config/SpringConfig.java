@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -21,13 +22,17 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
-    private SessionInterceptor sessionInterceptor;
-    private LoginPageBlockInterceptor loginPageBlockInterceptor;
+    private final SessionInterceptor sessionInterceptor;
+    private final LoginPageBlockInterceptor loginPageBlockInterceptor;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, SessionInterceptor sessionInterceptor) {
+    public SpringConfig(
+            ApplicationContext applicationContext,
+            SessionInterceptor sessionInterceptor,
+            LoginPageBlockInterceptor loginPageBlockInterceptor) {
         this.applicationContext = applicationContext;
         this.sessionInterceptor = sessionInterceptor;
+        this.loginPageBlockInterceptor = loginPageBlockInterceptor;
     }
 
     @Bean
@@ -61,6 +66,6 @@ public class SpringConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login", "/registration", "/static/**");
 
         registry.addInterceptor(loginPageBlockInterceptor)
-                .addPathPatterns("login");
+                .addPathPatterns("/login");
     }
 }

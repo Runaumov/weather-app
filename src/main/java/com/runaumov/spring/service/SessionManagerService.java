@@ -10,6 +10,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,29 +24,32 @@ public class SessionManagerService {
     @Autowired
     private UserDao userDao;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     private static final int SESSION_LIFETIME = 30;
 
-    public UserSession createNewUserSession(AuthenticatedUserDto authenticatedUserDto) {
+    public UserSessionDto createNewUserSession(AuthenticatedUserDto authenticatedUserDto) {
         UserSession userSession = new UserSession();
 
         User userProxy = userDao.getReferenceById(authenticatedUserDto.getId());
+        //User userProxy = userDao.findByUsername(authenticatedUserDto.getLogin()).get();
 
         userSession.setId(generateSessionToken());
         userSession.setUser(userProxy);
         userSession.setExpiresAt(generateExpiresAt());
+        UserSession createdUserSession = userSessionDao.create(userSession);
 
-        userSessionDao.create(userSession);
-        return userSession;
+        return UserSessionDto.builder()
+                .sessionId(createdUserSession.getId())
+                .userId(authenticatedUserDto.getId())
+                .userLogin(authenticatedUserDto.getLogin())
+                .expiresAt(createdUserSession.getExpiresAt())
+                .build();
     }
 
     public UserSessionDto getValidatedUserSessionDto (UUID sessionId) {
         Optional<UserSession> userSession = userSessionDao.findById(sessionId);
 
         if (!userSession.isPresent()) {
-            throw new RuntimeException("@"); // TODO
+            throw new RuntimeException("@1"); // TODO : удалить куки и сделать редирект на логи (мягкая очистка сессии)
         }
 
         LocalDateTime timeNow = LocalDateTime.now();
@@ -53,7 +57,7 @@ public class SessionManagerService {
 
         if (isExpired) {
             userSessionDao.delete(userSession.get());
-            throw new RuntimeException("@"); // TODO
+            throw new RuntimeException("@2"); // TODO
         }
 
         return UserSessionDto.builder()

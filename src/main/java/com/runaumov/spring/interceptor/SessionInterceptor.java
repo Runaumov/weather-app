@@ -8,11 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import java.util.UUID;
 
+@Component
 public class SessionInterceptor implements HandlerInterceptor {
 
+    @Autowired
     private final SessionManagerService sessionManagerService;
 
     public SessionInterceptor(SessionManagerService sessionManagerService) {
