@@ -14,27 +14,13 @@ import java.util.UUID;
 @Controller
 public class MainController {
 
-    private final SessionManagerService sessionManagerService;
-
-    @Autowired
-    public MainController(SessionManagerService sessionManagerService) {
-        this.sessionManagerService = sessionManagerService;
-    }
-
     @GetMapping("/")
     public String indexPage(
             @CookieValue(value = "SESSION_TOKEN", required = false) String sessionToken,
+            @CookieValue(value = "username", required = false) String username,
             Model model) {
 
-        if (sessionToken != null) {
-            try {
-                UUID token = UUID.fromString(sessionToken);
-                UserSession userSession = sessionManagerService.getUserSessionById(token);
-                model.addAttribute("login", userSession.getUser().getLogin());
-                return "index";
-            } catch (IllegalArgumentException | EntityNotFoundException ignored) {}
-        }
-
-        return "redirect:/login";
+        model.addAttribute("username", username);
+        return "index";
     }
 }

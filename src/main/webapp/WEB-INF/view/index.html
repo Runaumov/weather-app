@@ -22,14 +22,14 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <th:block th:if="${login != null}">
+                <th:block th:if="${username != null}">
                     <span class = "me-2 align-self-center">
-                          Welcom, <strong th:text="${login}">User</strong>!
+                          Welcom, <strong th:text="${username}">User</strong>!
                     </span>
                     <a href="/logout" class="btn btn-outline-danger">Exit</a>
                 </th:block>
-                <th:block th:unless="${login != null}">
-                    <a href="/login" class="btn btn-outline-success me-2">Login</a>
+                <th:block th:unless="${username != null}">
+                    <a href="/username" class="btn btn-outline-success me-2">Login</a>
                     <a href="/registration" class="btn btn-outline-success">Registration</a>
                 </th:block>
             </form>
