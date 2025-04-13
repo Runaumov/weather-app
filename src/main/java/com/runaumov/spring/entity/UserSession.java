@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalTime;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -14,18 +15,17 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "Sessions")
-public class Session {
+public class UserSession {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "ID", columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId",referencedColumnName = "id")
-    private User userId;
+    private User user;
 
     @Column(name = "ExpiresAt")
-    private LocalTime expiresAt;
+    private LocalDateTime expiresAt;
 
 }

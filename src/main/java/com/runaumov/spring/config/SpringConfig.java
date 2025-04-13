@@ -1,14 +1,16 @@
 package com.runaumov.spring.config;
 
+import com.runaumov.spring.interceptor.LoginPageBlockInterceptor;
+import com.runaumov.spring.interceptor.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.Thymeleaf;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -19,10 +21,13 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+    private SessionInterceptor sessionInterceptor;
+    private LoginPageBlockInterceptor loginPageBlockInterceptor;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
+    public SpringConfig(ApplicationContext applicationContext, SessionInterceptor sessionInterceptor) {
         this.applicationContext = applicationContext;
+        this.sessionInterceptor = sessionInterceptor;
     }
 
     @Bean
@@ -49,4 +54,13 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.viewResolver(resolver);
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sessionInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login", "/registration", "/static/**");
+
+        registry.addInterceptor(loginPageBlockInterceptor)
+                .addPathPatterns("login");
+    }
 }

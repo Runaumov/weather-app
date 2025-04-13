@@ -1,38 +1,41 @@
 package com.runaumov.spring.controller;
 
-import com.runaumov.spring.entity.UserSession;
 import com.runaumov.spring.service.SessionManagerService;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.UUID;
 
 @Controller
-public class MainController {
+@RequestMapping("/logout")
+public class LogoutController {
 
     private final SessionManagerService sessionManagerService;
 
     @Autowired
-    public MainController(SessionManagerService sessionManagerService) {
+    public LogoutController(SessionManagerService sessionManagerService) {
         this.sessionManagerService = sessionManagerService;
     }
 
-    @GetMapping("/")
-    public String indexPage(
+    @GetMapping
+    public String logoutUser(
             @CookieValue(value = "SESSION_TOKEN", required = false) String sessionToken,
-            Model model) {
+            HttpServletResponse response) {
 
         if (sessionToken != null) {
-            try {
-                UUID token = UUID.fromString(sessionToken);
-                UserSession userSession = sessionManagerService.getUserSessionById(token);
-                model.addAttribute("login", userSession.getUser().getLogin());
-                return "index";
-            } catch (IllegalArgumentException | EntityNotFoundException ignored) {}
+            sessionManagerService.removeSession(UUID.fromString(sessionToken));
+
+            Cookie cookie = new Cookie("SESSION_TOKEN", "");
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
         }
 
         return "redirect:/login";
