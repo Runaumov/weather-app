@@ -1,7 +1,7 @@
 package com.runaumov.spring.interceptor;
 
 import com.runaumov.spring.dto.UserSessionDto;
-import com.runaumov.spring.service.SessionManagerService;
+import com.runaumov.spring.service.UserSessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,10 +14,10 @@ import java.util.UUID;
 public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private final SessionManagerService sessionManagerService;
+    private final UserSessionService userSessionService;
 
-    public SessionInterceptor(SessionManagerService sessionManagerService) {
-        this.sessionManagerService = sessionManagerService;
+    public SessionInterceptor(UserSessionService userSessionService) {
+        this.userSessionService = userSessionService;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class SessionInterceptor implements HandlerInterceptor {
             for (Cookie cookie : cookies) {
                 if("SESSION_TOKEN".equals(cookie.getName())) {
                     UUID sessionId = UUID.fromString(cookie.getValue());
-                    UserSessionDto userSessionDto = sessionManagerService.getValidatedUserSessionDto(sessionId);
+                    UserSessionDto userSessionDto = userSessionService.getValidatedUserSessionDto(sessionId);
 
                     request.setAttribute("userSession", userSessionDto);
                     return true;

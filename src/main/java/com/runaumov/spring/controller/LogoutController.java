@@ -1,6 +1,6 @@
 package com.runaumov.spring.controller;
 
-import com.runaumov.spring.service.SessionManagerService;
+import com.runaumov.spring.service.UserSessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,11 @@ import java.util.UUID;
 @RequestMapping("/logout")
 public class LogoutController {
 
-    private final SessionManagerService sessionManagerService;
+    private final UserSessionService userSessionService;
 
     @Autowired
-    public LogoutController(SessionManagerService sessionManagerService) {
-        this.sessionManagerService = sessionManagerService;
+    public LogoutController(UserSessionService userSessionService) {
+        this.userSessionService = userSessionService;
     }
 
     @GetMapping
@@ -30,7 +30,7 @@ public class LogoutController {
         if (sessionToken != null) {
             // TODO : удаляет сессию, но такой сессии может не быть в бд (сессия удалилась раньше)
             // нужно как-то обработать это сценарий
-            sessionManagerService.removeSession(UUID.fromString(sessionToken));
+            userSessionService.removeSession(UUID.fromString(sessionToken));
 
             Cookie cookie = new Cookie("SESSION_TOKEN", "");
             cookie.setMaxAge(0);

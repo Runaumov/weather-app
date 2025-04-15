@@ -1,13 +1,12 @@
 package com.runaumov.spring.interceptor;
 
 import com.runaumov.spring.dto.UserSessionDto;
-import com.runaumov.spring.service.SessionManagerService;
+import com.runaumov.spring.service.UserSessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.UUID;
 
@@ -15,10 +14,10 @@ import java.util.UUID;
 public class LoginPageBlockInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private final SessionManagerService sessionManagerService;
+    private final UserSessionService userSessionService;
 
-    public LoginPageBlockInterceptor(SessionManagerService sessionManagerService) {
-        this.sessionManagerService = sessionManagerService;
+    public LoginPageBlockInterceptor(UserSessionService userSessionService) {
+        this.userSessionService = userSessionService;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class LoginPageBlockInterceptor implements HandlerInterceptor {
                 if ("SESSION_TOKEN".equals(cookie.getName())) {
                     try {
                         UUID sessionId = UUID.fromString(cookie.getValue());
-                        UserSessionDto userSessionDto = sessionManagerService.getValidatedUserSessionDto(sessionId);
+                        UserSessionDto userSessionDto = userSessionService.getValidatedUserSessionDto(sessionId);
 
                         response.sendRedirect(request.getContextPath() + "/");
                         return false;

@@ -2,22 +2,19 @@ package com.runaumov.spring.service;
 
 import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dao.UserSessionDao;
-import com.runaumov.spring.dto.AuthenticatedUserDto;
+import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.entity.UserSession;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SessionManagerService {
+public class UserSessionService {
 
     @Autowired
     private UserSessionDao userSessionDao;
@@ -26,10 +23,10 @@ public class SessionManagerService {
 
     private static final int SESSION_LIFETIME = 30;
 
-    public UserSessionDto createNewUserSession(AuthenticatedUserDto authenticatedUserDto) {
+    public UserSessionDto createNewUserSession(UserAuthenticatedDto userAuthenticatedDto) {
         UserSession userSession = new UserSession();
 
-        User userProxy = userDao.getReferenceById(authenticatedUserDto.getId());
+        User userProxy = userDao.getReferenceById(userAuthenticatedDto.getId());
         //User userProxy = userDao.findByUsername(authenticatedUserDto.getLogin()).get();
 
         userSession.setId(generateSessionToken());
@@ -39,8 +36,8 @@ public class SessionManagerService {
 
         return UserSessionDto.builder()
                 .sessionId(createdUserSession.getId())
-                .userId(authenticatedUserDto.getId())
-                .userLogin(authenticatedUserDto.getLogin())
+                .userId(userAuthenticatedDto.getId())
+                .userLogin(userAuthenticatedDto.getLogin())
                 .expiresAt(createdUserSession.getExpiresAt())
                 .build();
     }
