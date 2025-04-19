@@ -1,5 +1,6 @@
 package com.runaumov.spring.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.runaumov.spring.interceptor.LoginPageBlockInterceptor;
 import com.runaumov.spring.interceptor.SessionInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
     @Bean

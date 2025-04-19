@@ -35,7 +35,7 @@ public class MainController {
 
     @PostMapping("/search")
     public String getWeatherCards(
-            @RequestParam String cityName,
+            @RequestParam("cityName") String cityName,
             Model model) {
 
         CityNameRequest cityNameRequest = new CityNameRequest(cityName);
