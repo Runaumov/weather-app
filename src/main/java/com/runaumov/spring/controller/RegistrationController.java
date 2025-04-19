@@ -1,7 +1,7 @@
 package com.runaumov.spring.controller;
 import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserDto;
-import com.runaumov.spring.dto.UserRegistrationRequestDto;
+import com.runaumov.spring.dto.UserRegistrationRequest;
 import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.UserService;
@@ -30,20 +30,20 @@ public class RegistrationController {
 
     @GetMapping
     public String showRegistrationPage(Model model) {
-        model.addAttribute("userRegistrationRequestDto", new UserRegistrationRequestDto());
+        model.addAttribute("userRegistrationRequestDto", new UserRegistrationRequest());
         return "registration";
     }
 
     @PostMapping
     public String registrationUser(
-            @ModelAttribute("userRegistrationRequestDto")UserRegistrationRequestDto userRegistrationRequestDto,
+            @ModelAttribute("userRegistrationRequestDto") UserRegistrationRequest userRegistrationRequest,
             HttpServletResponse response) {
 
-        String login = userRegistrationRequestDto.getLogin();
+        String login = userRegistrationRequest.getLogin();
         UserAuthenticatedDto userAuthenticatedDto = new UserAuthenticatedDto();
 
         if (!userService.isUserExist(login)) {
-            UserDto userDto = new UserDto(login, userRegistrationRequestDto.getPassword());
+            UserDto userDto = new UserDto(login, userRegistrationRequest.getPassword());
             userAuthenticatedDto = userService.registerNewUser(userDto);
         }
 
