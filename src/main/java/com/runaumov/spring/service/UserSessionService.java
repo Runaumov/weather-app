@@ -88,6 +88,11 @@ public class UserSessionService {
         return userSessionDao.findById(uuid).orElseThrow(RuntimeException::new);
     }
 
+    public int getUserIdByUserSessionId(UUID uuid) {
+        return userSessionDao.getUserIdBySessionId(uuid)
+                .orElseThrow(() -> new RuntimeException("1231234"));
+    }
+
     public void removeSession(UUID uuid) {
         userSessionDao.deleteById(uuid);
     }

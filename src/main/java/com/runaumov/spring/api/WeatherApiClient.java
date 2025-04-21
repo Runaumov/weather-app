@@ -1,5 +1,6 @@
 package com.runaumov.spring.api;
 
+import com.runaumov.spring.dto.UserLocationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.net.URI;
@@ -11,8 +12,9 @@ import java.net.http.HttpResponse;
 public class WeatherApiClient {
 
     private static final String GEOCODING_URL = "http://api.openweathermap.org/geo/1.0/direct";
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/3.0/onecall";
+    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
     private static final String NUMBER_OF_CITIES = "5";
+    private static final String EXCLUDE_PARAMETRES = "minutely,hourly,alerts";
     @Value("${weather.api.key}") private String apiKey;
 
     HttpClient client = HttpClient.newHttpClient();
@@ -28,7 +30,25 @@ public class WeatherApiClient {
                 throw new RuntimeException("123"); // TODO
             }
         } catch (Exception e) {
-            throw new RuntimeException("123"); // TODO
+            throw new RuntimeException("234"); // TODO
+        }
+    }
+
+    public String getWeatherJson(UserLocationDto userLocationDto) {
+        try {
+            String url = String.format("%s?lat=%s&lon=%s&exclude=%s&apiKey=%s",
+                    WEATHER_URL, userLocationDto.getLatitude(), userLocationDto.getLongitude(), EXCLUDE_PARAMETRES, apiKey);
+            HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
+
+            // TODO : дублирование кода
+            if (response.statusCode() == 200 ) {
+                return response.body();
+            } else {
+                throw new RuntimeException("456"); // TODO
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("567"); // TODO
         }
     }
 

@@ -74,4 +74,16 @@ public class UserSessionDao implements iDao<UserSession, UUID> {
             }
         }
     }
+
+    public Optional<Integer> getUserIdBySessionId(UUID uuid) {
+        try (Session session = sessionFactory.openSession()) {
+            int userId = session.createQuery("SELECT us FROM UserSession us WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
+                    .setParameter("uuid", uuid)
+                    .setMaxResults(1)
+                    .uniqueResult()
+                    .getUser()
+                    .getId();
+            return Optional.of(userId);
+        }
+    }
 }
