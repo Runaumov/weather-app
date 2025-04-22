@@ -11,15 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserLocationDto {
+public class LocationDto {
     private int userId;
     private String name;
     private BigDecimal latitude;
     private BigDecimal longitude;
-
-    public UserLocationDto(int userId, BigDecimal longitude, BigDecimal latitude) {
-        this.userId = userId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 }

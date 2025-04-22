@@ -1,6 +1,6 @@
 package com.runaumov.spring.api;
 
-import com.runaumov.spring.dto.UserLocationDto;
+import com.runaumov.spring.dto.LocationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.net.URI;
@@ -34,10 +34,10 @@ public class WeatherApiClient {
         }
     }
 
-    public String getWeatherJson(UserLocationDto userLocationDto) {
+    public String getWeatherJson(LocationDto locationDto) {
         try {
             String url = String.format("%s?lat=%s&lon=%s&exclude=%s&apiKey=%s",
-                    WEATHER_URL, userLocationDto.getLatitude(), userLocationDto.getLongitude(), EXCLUDE_PARAMETRES, apiKey);
+                    WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
             // TODO : дублирование кода

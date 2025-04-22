@@ -18,6 +18,8 @@ public class WeatherService {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+
     public List<City> getCitiesList(CityNameRequest cityNameRequest) {
         try {
             String jsonResponse = weatherApiClient.getCityJson(cityNameRequest.getCityName());

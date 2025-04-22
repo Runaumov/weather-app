@@ -20,6 +20,7 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
+@EnableTransactionManagement
 @ComponentScan("com.runaumov.spring")
 @PropertySource("classpath:application.properties")
 @EnableWebMvc

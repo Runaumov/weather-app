@@ -2,9 +2,9 @@ package com.runaumov.spring.controller;
 
 import com.runaumov.spring.dto.CityNameRequest;
 import com.runaumov.spring.dto.LocationRequest;
-import com.runaumov.spring.dto.UserLocationDto;
+import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.entity.City;
-import com.runaumov.spring.entity.UserSession;
+import com.runaumov.spring.service.LocationService;
 import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,13 @@ public class MainController {
 
     private final WeatherService weatherService;
     private final UserSessionService userSessionService;
+    private final LocationService locationService;
 
     @Autowired
-    public MainController(WeatherService weatherService, UserSessionService userSessionService) {
+    public MainController(WeatherService weatherService, UserSessionService userSessionService, LocationService locationService) {
         this.weatherService = weatherService;
         this.userSessionService = userSessionService;
+        this.locationService = locationService;
     }
 
     @GetMapping("/")
@@ -55,10 +57,14 @@ public class MainController {
             @ModelAttribute LocationRequest locationRequest,
             @CookieValue (value = "SESSION_TOKEN", required = false) String sessionToken) {
 
-        int userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
-        BigDecimal latitude = new BigDecimal(locationRequest.getLatitude());
-        BigDecimal longitude = new BigDecimal(locationRequest.getLongitude());
-        UserLocationDto userLocationDto = new UserLocationDto(userId, latitude, longitude);
+        LocationDto locationDto = new LocationDto(
+                userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken)),
+                locationRequest.getName(),
+                new BigDecimal(locationRequest.getLatitude()),
+                new BigDecimal(locationRequest.getLongitude())
+        );
+
+        locationService.addLocation(locationDto);
 
         return "redirect:/";
     }

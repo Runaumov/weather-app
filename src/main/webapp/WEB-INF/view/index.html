@@ -56,6 +56,7 @@
                     <strong>Lon:</strong> <span th:text="${city.longitude}">0.0</span>
                 </p>
                 <form th:action="@{/add}" method="post">
+                    <input type="hidden" name="cityName" th:value="${city.cityName}" />
                     <input type="hidden" name="latitude" th:value="${city.latitude}" />
                     <input type="hidden" name="longitude" th:value="${city.longitude}" />
                     <button type="submit" class="btn btn-success">Add city</button>

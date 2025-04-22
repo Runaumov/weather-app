@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class UserDao implements iDao<User, String> {
+public class UserDao {
 
     private final SessionFactory sessionFactory;
 
@@ -21,7 +21,6 @@ public class UserDao implements iDao<User, String> {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
     public User create(User user) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -46,17 +45,19 @@ public class UserDao implements iDao<User, String> {
         }
     }
 
-    @Override
-    public Optional<User> findById(String id) {
-        return Optional.empty();
+    public Optional<User> findById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.createQuery("SELECT u FROM User u WHERE u.id = :id", User.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+            return Optional.ofNullable(user);
+        }
     }
 
-    @Override
     public Optional<User> update(User model) {
         return Optional.empty();
     }
 
-    @Override
     public void delete(User model) {
 
     }
