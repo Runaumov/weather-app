@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class LocationService {
 
@@ -28,6 +32,20 @@ public class LocationService {
                 locationDto.getLatitude(),
                 locationDto.getLongitude());
         locationDao.save(location);
-        System.out.println(location.toString());
+    }
+
+    @Transactional
+    public List<LocationDto> getLocationDto(int userId) {
+        List<Location> locationList = locationDao.getLocationListByUserId(userId);
+            return Optional.of(locationList)
+                            .filter(list -> !list.isEmpty())
+                                    .map(list -> list.stream()
+                                            .map(location -> new LocationDto(
+                                                    location.getUser().getId(),
+                                                    location.getName(),
+                                                    location.getLatitude(),
+                                                    location.getLongitude()))
+                    .collect(Collectors.toList()))
+                    .orElseThrow(() -> new RuntimeException("123"));
     }
 }

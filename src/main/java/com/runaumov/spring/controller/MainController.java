@@ -3,6 +3,7 @@ package com.runaumov.spring.controller;
 import com.runaumov.spring.dto.CityNameRequest;
 import com.runaumov.spring.dto.LocationRequest;
 import com.runaumov.spring.dto.LocationDto;
+import com.runaumov.spring.dto.WeatherDto;
 import com.runaumov.spring.entity.City;
 import com.runaumov.spring.service.LocationService;
 import com.runaumov.spring.service.UserSessionService;
@@ -36,7 +37,12 @@ public class MainController {
             @CookieValue(value = "username", required = false) String username,
             Model model) {
 
-        model.addAttribute("username", username);
+        int userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
+        locationService.getLocationDto(userId);
+        List<WeatherDto> weatherList = weatherService.getWeatherList(userId);
+
+        model.addAttribute("weatherList", weatherList);
+        model.addAttribute("username", username); // TODO
         return "index";
     }
 
