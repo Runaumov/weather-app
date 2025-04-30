@@ -48,20 +48,18 @@
     <div class="col mx-3" th:each="weather : ${weatherList}">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title" th:text="${weather.city}">City Name</h5>
+                <h5 class="card-title" th:text="${weather.city + ', ' + weather.sys.country}">City, Country</h5>
                 <p class="card-text">
-                    <span th:text="${weather.state}">State</span>,
-                    <span th:text="${weather.country}">Country</span><br/>
 
                     <strong>Coords:</strong>
-                    <span th:text="${weather.latitude}">0.0</span>,
-                    <span th:text="${weather.longitude}">0.0</span><br/>
+                    <span th:text="${weather.coord.latitude}">0.0</span>,
+                    <span th:text="${weather.coord.longitude}">0.0</span><br/>
 
                     <strong>Temperature:</strong>
-                    <span th:text="${weather.temp}">0.0</span> °C<br/>
+                    <span th:text="${weather.main.temp}">0.0</span> °C<br/>
 
                     <strong>Pressure:</strong>
-                    <span th:text="${weather.pressureMmHg}">0.0</span> mmHg
+                    <span th:text="${weather.main.pressure}">0.0</span> mmHg
                 </p>
             </div>
         </div>

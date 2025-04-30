@@ -4,6 +4,7 @@ import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.entity.User;
+import com.runaumov.spring.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,22 +22,25 @@ public class UserService {
 
     public UserAuthenticatedDto getAuthenticatedUserDto(UserDto userDto) {
         String login = userDto.getLogin();
-        Optional<User> user = userDao.findByUsername(login);
-        return user
-                .map(u -> new UserAuthenticatedDto(u.getId(), u.getLogin()))
-                // TODO : добавить свой обработчик исключений
-                .orElseThrow(() -> new RuntimeException("Зашлугка")
-                );
+        String password = userDto.getPassword();
+        Optional<User> optionalUser = userDao.findByUsername(login);
+
+        return optionalUser.filter(user -> PasswordUtils.verifyPassword(password, user.getPassword()))
+                .map(user -> new UserAuthenticatedDto(user.getId(), user.getLogin()))
+                .orElseThrow(() -> new RuntimeException("Неверный логин или пароль"));
     }
 
     public UserAuthenticatedDto registerNewUser(UserDto userDto) {
-        User userToSave = User.builder()
-                .login(userDto.getLogin())
-                .password(userDto.getPassword())
-                .build();
-        User savedUser = userDao.create(userToSave);
-
-        return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());
+        if (!isUserExist(userDto.getLogin())) {
+            User userToSave = User.builder()
+                    .login(userDto.getLogin())
+                    .password(PasswordUtils.hashPassword(userDto.getPassword()))
+                    .build();
+            User savedUser = userDao.create(userToSave);
+            return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());
+        } else {
+            throw new RuntimeException("Пользователь уже существует и не можеь быть заново зарегестрирован!");
+        }
     }
 
     public boolean isUserExist(String login) {

@@ -1,6 +1,5 @@
 package com.runaumov.spring.dto;
 
-import com.runaumov.spring.entity.City;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +11,5 @@ import java.util.List;
 @Getter
 @Setter
 public class CitiesListResponse {
-    private List<City> cities;
+    private List<CityDto> cities;
 }

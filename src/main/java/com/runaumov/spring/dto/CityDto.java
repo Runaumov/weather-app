@@ -1,4 +1,4 @@
-package com.runaumov.spring.entity;
+package com.runaumov.spring.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,14 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class City {
+public class CityDto {
 
     @JsonProperty("name") private String cityName;
     @JsonProperty("country") private String country;

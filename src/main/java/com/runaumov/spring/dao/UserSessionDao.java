@@ -59,19 +59,10 @@ public class UserSessionDao implements iDao<UserSession, UUID> {
     }
 
     public void deleteById(UUID uuid) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-
-            UserSession userSession = session.get(UserSession.class, uuid);
-
-            if (userSession != null) {
-                session.remove(userSession);
-                session.getTransaction().commit();
-            } else {
-                session.getTransaction().rollback();
-                // TODO : обработавть исключение
-                throw new RuntimeException("1");
-            }
+        Session session = sessionFactory.getCurrentSession();
+        UserSession userSession = session.get(UserSession.class, uuid);
+        if (userSession != null) {
+            session.remove(userSession);
         }
     }
 

@@ -37,15 +37,12 @@ public class LocationService {
     @Transactional
     public List<LocationDto> getLocationDto(int userId) {
         List<Location> locationList = locationDao.getLocationListByUserId(userId);
-            return Optional.of(locationList)
-                            .filter(list -> !list.isEmpty())
-                                    .map(list -> list.stream()
-                                            .map(location -> new LocationDto(
-                                                    location.getUser().getId(),
-                                                    location.getName(),
-                                                    location.getLatitude(),
-                                                    location.getLongitude()))
-                    .collect(Collectors.toList()))
-                    .orElseThrow(() -> new RuntimeException("123"));
+            return locationList.stream()
+                    .map(location -> new LocationDto(
+                            location.getUser().getId(),
+                            location.getName(),
+                            location.getLatitude(),
+                            location.getLongitude()))
+                    .collect(Collectors.toList());
     }
 }

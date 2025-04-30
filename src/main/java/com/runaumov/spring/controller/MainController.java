@@ -4,7 +4,7 @@ import com.runaumov.spring.dto.CityNameRequest;
 import com.runaumov.spring.dto.LocationRequest;
 import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.dto.WeatherDto;
-import com.runaumov.spring.entity.City;
+import com.runaumov.spring.dto.CityDto;
 import com.runaumov.spring.service.LocationService;
 import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.WeatherService;
@@ -38,8 +38,9 @@ public class MainController {
             Model model) {
 
         int userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
-        locationService.getLocationDto(userId);
-        List<WeatherDto> weatherList = weatherService.getWeatherList(userId);
+        List<LocationDto> locationList = locationService.getLocationDto(userId);
+
+        List<WeatherDto> weatherList = weatherService.getWeatherList(locationList);
 
         model.addAttribute("weatherList", weatherList);
         model.addAttribute("username", username); // TODO
@@ -52,7 +53,7 @@ public class MainController {
             Model model) {
 
         CityNameRequest cityNameRequest = new CityNameRequest(cityName);
-        List<City> cities = weatherService.getCitiesList(cityNameRequest);
+        List<CityDto> cities = weatherService.getCitiesList(cityNameRequest);
 
         model.addAttribute("cities", cities);
         return "index";

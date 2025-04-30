@@ -15,6 +15,7 @@ public class WeatherApiClient {
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
     private static final String NUMBER_OF_CITIES = "5";
     private static final String EXCLUDE_PARAMETRES = "minutely,hourly,alerts";
+    private static final String UNIT_OF_MEASUREMENT = "metric";
     @Value("${weather.api.key}") private String apiKey;
 
     HttpClient client = HttpClient.newHttpClient();
@@ -27,17 +28,17 @@ public class WeatherApiClient {
             if (response.statusCode() == 200 ) {
                 return response.body();
             } else {
-                throw new RuntimeException("123"); // TODO
+                throw new RuntimeException("getCityJson error 1"); // TODO
             }
         } catch (Exception e) {
-            throw new RuntimeException("234"); // TODO
+            throw new RuntimeException("getCityJson error 2"); // TODO
         }
     }
 
     public String getWeatherJson(LocationDto locationDto) {
         try {
-            String url = String.format("%s?lat=%s&lon=%s&exclude=%s&apiKey=%s",
-                    WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, apiKey);
+            String url = String.format("%s?lat=%s&lon=%s&exclude=%s&units=%s&apiKey=%s",
+                    WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, UNIT_OF_MEASUREMENT, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
             // TODO : дублирование кода

@@ -14,7 +14,7 @@
             <form class="p-4 border rounded bg-light" th:method="POST" th:action="@{/login}" th:object="${user}">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Username</label>
-                    <input type="email" th:field="*{login}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input type="text" th:field="*{login}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Password</label>

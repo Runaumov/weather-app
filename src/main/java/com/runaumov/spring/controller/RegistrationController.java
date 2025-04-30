@@ -30,7 +30,7 @@ public class RegistrationController {
 
     @GetMapping
     public String showRegistrationPage(Model model) {
-        model.addAttribute("userRegistrationRequestDto", new UserRegistrationRequest());
+        model.addAttribute("userRegistrationRequest", new UserRegistrationRequest());
         return "registration";
     }
 
@@ -39,13 +39,8 @@ public class RegistrationController {
             @ModelAttribute("userRegistrationRequestDto") UserRegistrationRequest userRegistrationRequest,
             HttpServletResponse response) {
 
-        String login = userRegistrationRequest.getLogin();
-        UserAuthenticatedDto userAuthenticatedDto = new UserAuthenticatedDto();
-
-        if (!userService.isUserExist(login)) {
-            UserDto userDto = new UserDto(login, userRegistrationRequest.getPassword());
-            userAuthenticatedDto = userService.registerNewUser(userDto);
-        }
+        UserDto userDto = new UserDto(userRegistrationRequest.getLogin(), userRegistrationRequest.getPassword());
+        UserAuthenticatedDto userAuthenticatedDto = userService.registerNewUser(userDto);
 
         UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto); // TODO : дублирование
         String newSessionToken = userSessionDto.getSessionId().toString();

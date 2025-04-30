@@ -28,8 +28,6 @@ public class LogoutController {
             HttpServletResponse response) {
 
         if (sessionToken != null) {
-            // TODO : удаляет сессию, но такой сессии может не быть в бд (сессия удалилась раньше)
-            // нужно как-то обработать это сценарий
             userSessionService.removeSession(UUID.fromString(sessionToken));
 
             Cookie cookie = new Cookie("SESSION_TOKEN", "");

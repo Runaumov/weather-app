@@ -8,6 +8,7 @@ import com.runaumov.spring.entity.User;
 import com.runaumov.spring.entity.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -16,12 +17,16 @@ import java.util.UUID;
 @Service
 public class UserSessionService {
 
-    @Autowired
-    private UserSessionDao userSessionDao;
-    @Autowired
-    private UserDao userDao;
+    private final UserSessionDao userSessionDao;
+    private final UserDao userDao;
 
     private static final int SESSION_LIFETIME = 30;
+
+    @Autowired
+    public UserSessionService(UserDao userDao, UserSessionDao userSessionDao) {
+        this.userDao = userDao;
+        this.userSessionDao = userSessionDao;
+    }
 
     public UserSessionDto createNewUserSession(UserAuthenticatedDto userAuthenticatedDto) {
         UserSession userSession = new UserSession();
@@ -88,11 +93,13 @@ public class UserSessionService {
         return userSessionDao.findById(uuid).orElseThrow(RuntimeException::new);
     }
 
+
     public int getUserIdByUserSessionId(UUID uuid) {
         return userSessionDao.getUserIdBySessionId(uuid)
                 .orElseThrow(() -> new RuntimeException("1231234"));
     }
 
+    @Transactional
     public void removeSession(UUID uuid) {
         userSessionDao.deleteById(uuid);
     }
