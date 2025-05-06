@@ -1,9 +1,6 @@
 package com.runaumov.spring.dao;
 
-import com.runaumov.spring.entity.User;
 import com.runaumov.spring.entity.UserSession;
-import lombok.Cleanup;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class UserSessionDao implements iDao<UserSession, UUID> {
+public class UserSessionDao {
 
     private final SessionFactory sessionFactory;
 
@@ -23,58 +20,40 @@ public class UserSessionDao implements iDao<UserSession, UUID> {
     }
 
 
-    @Override
     public Optional<UserSession> findById(UUID uuid) {
-        try (Session session = sessionFactory.openSession()) {
+        Session session = sessionFactory.getCurrentSession();
             UserSession userSession = session.createQuery("SELECT us FROM UserSession us " +
                                     "LEFT JOIN FETCH us.user WHERE us.id = :uuid", UserSession.class)
                     .setParameter("uuid", uuid)
                     .uniqueResult();
             return Optional.ofNullable(userSession);
-        }
     }
 
-    @Override
-    public UserSession create(UserSession userSession) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.persist(userSession);
-            session.getTransaction().commit();
-            return userSession;
-        }
+    public UserSession save(UserSession userSession) {
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(userSession);
+        return userSession;
     }
 
-    @Override
-    public Optional<UserSession> update(UserSession model) {
-        return Optional.empty();
-    }
-
-    @Override
     public void delete(UserSession userSession) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.remove(userSession);
-            session.getTransaction().commit();
-        }
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(userSession);
     }
 
     public void deleteById(UUID uuid) {
         Session session = sessionFactory.getCurrentSession();
-        UserSession userSession = session.get(UserSession.class, uuid);
-        if (userSession != null) {
-            session.remove(userSession);
-        }
+        session.createMutationQuery("DELETE FROM UserSession us WHERE us.id = :uuid")
+                .setParameter("uuid", uuid)
+                .executeUpdate();
     }
 
-    public Optional<Integer> getUserIdBySessionId(UUID uuid) {
-        try (Session session = sessionFactory.openSession()) {
-            int userId = session.createQuery("SELECT us FROM UserSession us WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
+    public Optional<Integer> findUserIdBySessionId(UUID uuid) {
+        Session session = sessionFactory.getCurrentSession();
+        UserSession userSession = session.createQuery("SELECT us FROM UserSession us WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
                     .setParameter("uuid", uuid)
                     .setMaxResults(1)
-                    .uniqueResult()
-                    .getUser()
-                    .getId();
-            return Optional.of(userId);
-        }
+                    .uniqueResult();
+
+        return Optional.ofNullable(userSession).map(us -> us.getUser().getId());
     }
 }

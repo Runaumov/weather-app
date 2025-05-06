@@ -17,22 +17,19 @@ import java.util.List;
 @Service
 public class WeatherService {
 
+    private final WeatherApiClient weatherApiClient;
+    private final ObjectMapper objectMapper;
+
     @Autowired
-    private WeatherApiClient weatherApiClient;
-    @Autowired
-    private ObjectMapper objectMapper;
+    public WeatherService(ObjectMapper objectMapper, WeatherApiClient weatherApiClient) {
+        this.objectMapper = objectMapper;
+        this.weatherApiClient = weatherApiClient;
+    }
 
     public List<CityDto> getCitiesList(CityNameRequest cityNameRequest) {
-        try {
-//            String jsonResponse = weatherApiClient.getCityJson(cityNameRequest.getCityName());
-//            return objectMapper.readValue(jsonResponse, new TypeReference<List<City>>() {});
-            return objectMapper.readValue(
-                    weatherApiClient.getCityJson(cityNameRequest.getCityName()),
-                    new TypeReference<List<CityDto>>() {
-                    });
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("!Ошибка в преобразовании json"); // TODO
-        }
+        return parseJson(
+                weatherApiClient.getCityJson(cityNameRequest.getCityName()),
+                new TypeReference<List<CityDto>>() {});
     }
 
     public List<WeatherDto> getWeatherList(List<LocationDto> locationList) {
@@ -47,6 +44,22 @@ public class WeatherService {
             }
         }
         return weatherDtoList;
+    }
+
+    private <T> T parseJson(String json, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("!Ошибка в преобразовании json"); // TODO : need create custom exc
+        }
+    }
+
+    private <T> T parseJson(String json, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("!Ошибка в преобразовании json (typeReference)"); // TODO : need create custom exc
+        }
     }
 
 }

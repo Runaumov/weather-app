@@ -11,8 +11,12 @@ import java.util.List;
 @Repository
 public class LocationDao {
 
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    private SessionFactory sessionFactory;
+    public LocationDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public void save(Location location) {
         Session session = sessionFactory.getCurrentSession();
