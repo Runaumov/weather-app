@@ -13,9 +13,9 @@ import java.util.UUID;
 @Component
 public class SessionInterceptor implements HandlerInterceptor {
 
-    @Autowired
     private final UserSessionService userSessionService;
 
+    @Autowired
     public SessionInterceptor(UserSessionService userSessionService) {
         this.userSessionService = userSessionService;
     }

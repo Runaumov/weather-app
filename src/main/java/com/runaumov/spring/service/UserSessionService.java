@@ -6,6 +6,7 @@ import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.entity.UserSession;
+import com.runaumov.spring.exception.SessionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,7 @@ public class UserSessionService {
     @Transactional
     public UserSessionDto getValidatedUserSessionDto (UUID sessionId) {
         UserSession userSession = userSessionDao.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("@1"));// TODO : удалить куки и сделать редирект на логи (мягкая очистка сессии)
+                .orElseThrow(() -> new SessionNotFoundException("Session not found or expired"));// TODO : удалить куки и сделать редирект на логи (мягкая очистка сессии)
 
         LocalDateTime timeNow = LocalDateTime.now();
         boolean isExpired = userSession.getExpiresAt().isBefore(timeNow);

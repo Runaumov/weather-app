@@ -13,9 +13,9 @@ import java.util.UUID;
 @Component
 public class LoginPageBlockInterceptor implements HandlerInterceptor {
 
-    @Autowired
     private final UserSessionService userSessionService;
 
+    @Autowired
     public LoginPageBlockInterceptor(UserSessionService userSessionService) {
         this.userSessionService = userSessionService;
     }
@@ -27,18 +27,19 @@ public class LoginPageBlockInterceptor implements HandlerInterceptor {
         if(cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("SESSION_TOKEN".equals(cookie.getName())) {
-                    try {
-                        UUID sessionId = UUID.fromString(cookie.getValue());
-                        UserSessionDto userSessionDto = userSessionService.getValidatedUserSessionDto(sessionId);
-
-                        response.sendRedirect(request.getContextPath() + "/");
-                        return false;
-                    } catch (Exception ignored) {
-                        // TODO
-                    }
+                    UUID sessionId = UUID.fromString(cookie.getValue());
+                    userSessionService.getValidatedUserSessionDto(sessionId);
+                    return true;
                 }
             }
         }
         return true;
+    }
+
+    private void clearSessionCookie(HttpServletResponse response) {
+        Cookie expiredCookie = new Cookie("SESSION_TOKEN", null);
+        expiredCookie.setMaxAge(0);
+        expiredCookie.setPath("/");
+        response.addCookie(expiredCookie);
     }
 }
