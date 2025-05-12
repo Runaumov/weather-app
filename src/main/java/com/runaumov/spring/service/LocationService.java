@@ -4,6 +4,7 @@ import com.runaumov.spring.dao.LocationDao;
 import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.entity.Location;
+import com.runaumov.spring.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,14 @@ public class LocationService {
     public void addLocation(LocationDto locationDto) {
         Location location = new Location(
                 locationDto.getName(),
-                userDao.findById(locationDto.getUserId()).orElseThrow(RuntimeException::new), // TODO
+                userDao.findById(locationDto.getUserId())
+                        .orElseThrow(() -> new UserNotFoundException(
+                                String.format("Пользователь с ID %s не найден на сервере", locationDto.getUserId()))
+                        ),
                 locationDto.getLatitude(),
-                locationDto.getLongitude());
+                locationDto.getLongitude()
+        );
+
         locationDao.save(location);
     }
 

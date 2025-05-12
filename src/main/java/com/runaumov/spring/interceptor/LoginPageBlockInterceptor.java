@@ -36,10 +36,4 @@ public class LoginPageBlockInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void clearSessionCookie(HttpServletResponse response) {
-        Cookie expiredCookie = new Cookie("SESSION_TOKEN", null);
-        expiredCookie.setMaxAge(0);
-        expiredCookie.setPath("/");
-        response.addCookie(expiredCookie);
-    }
 }

@@ -4,6 +4,8 @@ import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.entity.User;
+import com.runaumov.spring.exception.AuthenticationFailedException;
+import com.runaumov.spring.exception.RegistrationFailedException;
 import com.runaumov.spring.utils.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class UserService {
 
         return optionalUser.filter(user -> PasswordUtils.verifyPassword(password, user.getPassword()))
                 .map(user -> new UserAuthenticatedDto(user.getId(), user.getLogin()))
-                .orElseThrow(() -> new RuntimeException("Неверный логин или пароль")); //TODO : need create custom exc
+                .orElseThrow(() -> new AuthenticationFailedException("Неверный логин или пароль"));
     }
 
     public UserAuthenticatedDto registerNewUser(UserDto userDto) { //TODO : mb need return login/id/void
@@ -42,7 +44,7 @@ public class UserService {
             User savedUser = userDao.save(userToSave);
             return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());
         } else {
-            throw new RuntimeException("Пользователь уже существует и не можеь быть заново зарегестрирован!"); //TODO : need create custom exc
+            throw new RegistrationFailedException("Пользователь уже существует и не можеь быть заново зарегестрирован!");
         }
     }
 

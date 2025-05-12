@@ -51,7 +51,7 @@ public class UserSessionService {
     @Transactional
     public UserSessionDto getValidatedUserSessionDto (UUID sessionId) {
         UserSession userSession = userSessionDao.findById(sessionId)
-                .orElseThrow(() -> new SessionNotFoundException("Session not found or expired"));// TODO : удалить куки и сделать редирект на логи (мягкая очистка сессии)
+                .orElseThrow(() -> new SessionNotFoundException("Session not found or expired"));
 
         LocalDateTime timeNow = LocalDateTime.now();
         boolean isExpired = userSession.getExpiresAt().isBefore(timeNow);
@@ -71,7 +71,7 @@ public class UserSessionService {
     @Transactional
     public int getUserIdByUserSessionId(UUID uuid) { //TODO : check calling this method after validation session
         return userSessionDao.findUserIdBySessionId(uuid)
-                .orElseThrow(() -> new RuntimeException("1231234"));
+                .orElseThrow(() -> new SessionNotFoundException("Сессия не найдена или истекла"));
     }
 
     @Transactional
@@ -82,7 +82,7 @@ public class UserSessionService {
     @Transactional
     protected void handleExpiredSession(UserSession userSession) {
         userSessionDao.delete(userSession);
-        throw new RuntimeException("@2"); // TODO
+        throw new SessionNotFoundException("Сессия истекла");
     }
 
     private LocalDateTime generateExpiresAt() {

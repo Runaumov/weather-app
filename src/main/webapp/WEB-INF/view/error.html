@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Ошибка [[${status}]]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+<div class="text-center">
+    <h1 class="display-4 text-danger">Упс!.. Что-то пошло не так…</h1>
+    <p class="lead">Ошибка [[${status}]]</p>
+    <p th:text="${errorMessage}">Произошла неизвестная ошибка.</p>
+    <a href="/" class="btn btn-primary mt-3">Вернуться на главную</a>
+</div>
+</body>
+</html>

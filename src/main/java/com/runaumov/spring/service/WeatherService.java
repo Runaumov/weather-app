@@ -8,6 +8,7 @@ import com.runaumov.spring.dto.CityNameRequest;
 import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.dto.WeatherDto;
 import com.runaumov.spring.dto.CityDto;
+import com.runaumov.spring.exception.WeatherApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class WeatherService {
                 WeatherDto weatherDto = objectMapper.readValue(weatherJson, WeatherDto.class);
                 weatherDtoList.add(weatherDto);
             } catch (Exception e) {
-                throw new RuntimeException("!Ошибка в преобразовании json"); // TODO
+                throw new WeatherApiException("Ошибка в преобразовании json");
             }
         }
         return weatherDtoList;
@@ -50,7 +51,7 @@ public class WeatherService {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("!Ошибка в преобразовании json"); // TODO : need create custom exc
+            throw new WeatherApiException("Ошибка в преобразовании json");
         }
     }
 
@@ -58,7 +59,7 @@ public class WeatherService {
         try {
             return objectMapper.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("!Ошибка в преобразовании json (typeReference)"); // TODO : need create custom exc
+            throw new WeatherApiException("Ошибка в преобразовании json");
         }
     }
 
