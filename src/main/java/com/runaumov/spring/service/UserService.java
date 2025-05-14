@@ -6,7 +6,7 @@ import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.exception.AuthenticationFailedException;
 import com.runaumov.spring.exception.RegistrationFailedException;
-import com.runaumov.spring.utils.PasswordUtils;
+import com.runaumov.spring.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class UserService {
         String password = userDto.getPassword();
         Optional<User> optionalUser = userDao.findByUsername(login);
 
-        return optionalUser.filter(user -> PasswordUtils.verifyPassword(password, user.getPassword()))
+        return optionalUser.filter(user -> PasswordUtil.verifyPassword(password, user.getPassword()))
                 .map(user -> new UserAuthenticatedDto(user.getId(), user.getLogin()))
                 .orElseThrow(() -> new AuthenticationFailedException("Неверный логин или пароль"));
     }
@@ -39,7 +39,7 @@ public class UserService {
         if (existingUser.isPresent()) {
             User userToSave = User.builder()
                     .login(userDto.getLogin())
-                    .password(PasswordUtils.hashPassword(userDto.getPassword()))
+                    .password(PasswordUtil.hashPassword(userDto.getPassword()))
                     .build();
             User savedUser = userDao.save(userToSave);
             return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());

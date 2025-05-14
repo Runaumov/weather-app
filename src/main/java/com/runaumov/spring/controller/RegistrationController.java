@@ -5,6 +5,7 @@ import com.runaumov.spring.dto.UserRegistrationRequest;
 import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.UserService;
+import com.runaumov.spring.utils.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,22 +42,9 @@ public class RegistrationController {
 
         UserDto userDto = new UserDto(userRegistrationRequest.getLogin(), userRegistrationRequest.getPassword());
         UserAuthenticatedDto userAuthenticatedDto = userService.registerNewUser(userDto);
+        UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto);
 
-        UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto); // TODO : дублирование
-        String newSessionToken = userSessionDto.getSessionId().toString();
-        String username = userSessionDto.getUserLogin();
-
-        Cookie sessionCookie = new Cookie("SESSION_TOKEN", newSessionToken);
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setPath("/");
-
-        Cookie usernameCookie = new Cookie("username", username);
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setPath("/");
-
-        response.addCookie(sessionCookie);
-        response.addCookie(usernameCookie);
-
+        CookieUtil.setSessionCookie(response, userSessionDto);
         return "redirect:/";
     }
 }

@@ -1,6 +1,7 @@
 package com.runaumov.spring;
 
 import com.runaumov.spring.exception.*;
+import com.runaumov.spring.utils.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,11 +19,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        Cookie expiredCookie = new Cookie("SESSION_TOKEN", null);
-        expiredCookie.setMaxAge(0);
-        expiredCookie.setPath("/");
-        response.addCookie(expiredCookie);
-
+        CookieUtil.deleteCookie(response);
         return "redirect:/login";
     }
 

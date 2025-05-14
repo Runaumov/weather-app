@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,6 +45,13 @@ public class UserSessionDao {
         Session session = sessionFactory.getCurrentSession();
         session.createMutationQuery("DELETE FROM UserSession us WHERE us.id = :uuid")
                 .setParameter("uuid", uuid)
+                .executeUpdate();
+    }
+
+    public void deleteExpiredUserSessions(LocalDateTime now) {
+        Session session = sessionFactory.getCurrentSession();
+        session.createMutationQuery("DELETE FROM UserSession us WHERE us.expiresAt < :now")
+                .setParameter("now", now)
                 .executeUpdate();
     }
 
