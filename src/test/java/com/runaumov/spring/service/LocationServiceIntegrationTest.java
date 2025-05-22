@@ -9,6 +9,7 @@ import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.entity.Location;
 import com.runaumov.spring.entity.User;
+import com.runaumov.spring.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.Random;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -53,7 +54,7 @@ public class LocationServiceIntegrationTest {
     }
 
     @Test
-    public void addLocation_userExist_locationSaved() {
+    public void saveLocation_whenLocationDtoExist() {
         LocationDto locationDto = new LocationDto(testUser.getId(), "Home", BigDecimal.valueOf(1.0), BigDecimal.valueOf(2.0));
 
         locationService.addLocation(locationDto);
@@ -67,4 +68,45 @@ public class LocationServiceIntegrationTest {
         assertEquals(1.0, savedLocation.getLatitude().doubleValue());
         assertEquals(2.0, savedLocation.getLongitude().doubleValue());
     }
+
+    @Test
+    public void shouldThrowUserNotFoundException_whenUserNotFound() {
+        Random random = new Random();
+        int uncorrectedUserId = random.nextInt(98) + 2;
+        LocationDto locationDto = new LocationDto(uncorrectedUserId, "Home", BigDecimal.valueOf(1.0), BigDecimal.valueOf(2.0));
+
+        assertThrows(UserNotFoundException.class, () ->
+                locationService.addLocation(locationDto));
+    }
+
+    @Test
+    public void shouldGetLocation_whenUserIdExist() {
+        LocationDto locationDto1 = new LocationDto(testUser.getId(), "Home", BigDecimal.valueOf(1.0), BigDecimal.valueOf(2.0));
+        LocationDto locationDto2 = new LocationDto(testUser.getId(), "NoHome", BigDecimal.valueOf(3.0), BigDecimal.valueOf(4.0));
+        locationService.addLocation(locationDto1);
+        locationService.addLocation(locationDto2);
+        List<LocationDto> result = locationService.getLocationDto(testUser.getId());
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+
+        LocationDto firstLocationDto = result.get(0);
+        assertEquals(testUser.getId(), firstLocationDto.getUserId());
+        assertEquals("Home",firstLocationDto.getName());
+
+        LocationDto secondLocationDto = result.get(1);
+        assertEquals(testUser.getId(), secondLocationDto.getUserId());
+        assertEquals("NoHome",secondLocationDto.getName());
+    }
+
+    @Test
+    public void shouldReturnEmptyList_whenUserHasNotLocation() {
+        List<LocationDto> result = locationService.getLocationDto(testUser.getId());
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.size());
+
+    }
+
 }

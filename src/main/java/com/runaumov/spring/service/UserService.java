@@ -37,15 +37,16 @@ public class UserService {
     public UserAuthenticatedDto registerNewUser(UserDto userDto) { //TODO : mb need return login/id/void
         Optional<User> existingUser = userDao.findByUsername(userDto.getLogin());
         if (existingUser.isPresent()) {
-            User userToSave = User.builder()
-                    .login(userDto.getLogin())
-                    .password(PasswordUtil.hashPassword(userDto.getPassword()))
-                    .build();
-            User savedUser = userDao.save(userToSave);
-            return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());
-        } else {
             throw new RegistrationFailedException("Пользователь уже существует и не можеь быть заново зарегестрирован!");
         }
+
+        User userToSave = User.builder()
+                .login(userDto.getLogin())
+                .password(PasswordUtil.hashPassword(userDto.getPassword()))
+                .build();
+
+        User savedUser = userDao.save(userToSave);
+        return new UserAuthenticatedDto(savedUser.getId(), savedUser.getLogin());
     }
 
 }

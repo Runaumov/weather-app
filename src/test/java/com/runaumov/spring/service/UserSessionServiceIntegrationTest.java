@@ -52,7 +52,6 @@ public class UserSessionServiceIntegrationTest {
         userDao.save(testUser);
 
         userAuthenticatedDto = new UserAuthenticatedDto(testUser.getId(), testUser.getLogin());
-
     }
 
     @Test
