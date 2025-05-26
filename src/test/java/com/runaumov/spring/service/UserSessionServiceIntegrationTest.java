@@ -114,7 +114,7 @@ public class UserSessionServiceIntegrationTest {
         UserSessionDto createdSession = userSessionService.createNewUserSession(userAuthenticatedDto);
         UUID sessionId = createdSession.getSessionId();
 
-        int userId = userSessionService.getUserIdByUserSessionId(sessionId);
+        Long userId = userSessionService.getUserIdByUserSessionId(sessionId);
 
         assertEquals(testUser.getId(), userId);
     }

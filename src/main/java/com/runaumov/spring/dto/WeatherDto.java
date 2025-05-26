@@ -13,6 +13,7 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherDto {
+    private Long locationId;
 
     @JsonProperty("name") private String city;
     @JsonProperty("coord") private Coord coord;

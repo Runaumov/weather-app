@@ -47,6 +47,12 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <div class="col mx-3" th:each="weather : ${weatherList}">
         <div class="card h-100">
+            <form th:action="@{/delete}" method="post"
+                  class="position-absolute top-0 end-0 m-2">
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="hidden" name="locationId" th:value="${weather.locationId}"/>
+                <button type="submit" class="btn-close" aria-label="Close"></button>
+            </form>
             <div class="card-body">
                 <h5 class="card-title" th:text="${weather.city + ', ' + weather.sys.country}">City, Country</h5>
                 <p class="card-text">

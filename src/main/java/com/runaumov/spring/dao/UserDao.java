@@ -31,12 +31,12 @@ public class UserDao {
         return Optional.ofNullable(user);
     }
 
-    public User getReferenceById(int id) {
+    public User getReferenceById(Long id) {
         Session session = sessionFactory.getCurrentSession();
         return session.getReference(User.class, id);
     }
 
-    public Optional<User> findById(int id) {
+    public Optional<User> findById(Long id) {
         Session session = sessionFactory.getCurrentSession();
         User user = session.createQuery("SELECT u FROM User u WHERE u.id = :id", User.class)
                     .setParameter("id", id)

@@ -37,7 +37,7 @@ public class MainController {
             @CookieValue(value = "username", required = false) String username,
             Model model) {
 
-        int userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
+        Long userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
         List<LocationDto> locationList = locationService.getLocationDto(userId);
 
         List<WeatherDto> weatherList = weatherService.getWeatherList(locationList);
@@ -73,6 +73,20 @@ public class MainController {
 
         locationService.addLocation(locationDto);
 
+        return "redirect:/";
+    }
+
+        @DeleteMapping("/delete")
+        public String deleteLocation(@RequestParam("locationId") Long locationId) {
+            System.out.println("DELETE method called with locationId: " + locationId);
+            locationService.deleteById(locationId);
+            return "redirect:/";
+        }
+
+    @PostMapping("/delete")
+    public String deleteLocationPost(@RequestParam("locationId") Long locationId) {
+        System.out.println("POST method called with locationId: " + locationId);
+        locationService.deleteById(locationId);
         return "redirect:/";
     }
 }

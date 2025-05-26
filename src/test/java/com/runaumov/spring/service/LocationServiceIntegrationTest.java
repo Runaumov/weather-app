@@ -72,7 +72,7 @@ public class LocationServiceIntegrationTest {
     @Test
     public void shouldThrowUserNotFoundException_whenUserNotFound() {
         Random random = new Random();
-        int uncorrectedUserId = random.nextInt(98) + 2;
+        Long uncorrectedUserId = random.nextLong(98) + 2;
         LocationDto locationDto = new LocationDto(uncorrectedUserId, "Home", BigDecimal.valueOf(1.0), BigDecimal.valueOf(2.0));
 
         assertThrows(UserNotFoundException.class, () ->
@@ -106,7 +106,21 @@ public class LocationServiceIntegrationTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
         assertEquals(0, result.size());
+    }
 
+    @Test
+    public void shouldDeleteLocation_whenLocationIdExist() {
+        LocationDto locationDto = new LocationDto(testUser.getId(), "Home", BigDecimal.valueOf(1.0), BigDecimal.valueOf(2.0));
+
+        locationService.addLocation(locationDto);
+
+        List<Location> locations = locationDao.getLocationListByUserId(testUser.getId());
+        assertFalse(locations.isEmpty());
+
+        Long locationId = locations.get(0).getId();
+
+        locationService.deleteById(locationId);
+        assertTrue(locationDao.getLocationByLocationId(locationId).isEmpty());
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 public class UserSessionDto {
 
     private UUID sessionId;
-    private int userId;
+    private Long userId;
     private String userLogin;
     private LocalDateTime expiresAt;
 }

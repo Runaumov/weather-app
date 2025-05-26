@@ -55,7 +55,7 @@ public class UserSessionDao {
                 .executeUpdate();
     }
 
-    public Optional<Integer> findUserIdBySessionId(UUID uuid) {
+    public Optional<Long> findUserIdBySessionId(UUID uuid) {
         Session session = sessionFactory.getCurrentSession();
         UserSession userSession = session.createQuery("SELECT us FROM UserSession us WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
                     .setParameter("uuid", uuid)

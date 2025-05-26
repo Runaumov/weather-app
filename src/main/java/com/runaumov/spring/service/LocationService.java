@@ -39,14 +39,20 @@ public class LocationService {
     }
 
     @Transactional
-    public List<LocationDto> getLocationDto(int userId) {
+    public List<LocationDto> getLocationDto(Long userId) {
         List<Location> locationList = locationDao.getLocationListByUserId(userId);
             return locationList.stream()
                     .map(location -> new LocationDto(
+                            location.getId(),
                             location.getUser().getId(),
                             location.getName(),
                             location.getLatitude(),
                             location.getLongitude()))
                     .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteById(Long locationId) {
+        locationDao.deleteById(locationId);
     }
 }

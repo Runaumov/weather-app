@@ -38,6 +38,7 @@ public class WeatherService {
             try {
                 String weatherJson = weatherApiClient.getWeatherJson(locationDto);
                 WeatherDto weatherDto = objectMapper.readValue(weatherJson, WeatherDto.class);
+                weatherDto.setLocationId(locationDto.getLocationId());
                 weatherDtoList.add(weatherDto);
             } catch (Exception e) {
                 throw new WeatherApiException("Ошибка в преобразовании json");
