@@ -34,7 +34,6 @@ public class MainController {
     @GetMapping("/")
     public String indexPage(
             @CookieValue(value = "SESSION_TOKEN", required = false) String sessionToken,
-            @CookieValue(value = "username", required = false) String username,
             Model model) {
 
         Long userId = userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken));
@@ -43,7 +42,7 @@ public class MainController {
         List<WeatherDto> weatherList = weatherService.getWeatherList(locationList);
 
         model.addAttribute("weatherList", weatherList);
-        model.addAttribute("username", username); // TODO
+
         return "index";
     }
 
@@ -56,6 +55,7 @@ public class MainController {
         List<CityDto> cities = weatherService.getCitiesList(cityNameRequest);
 
         model.addAttribute("cities", cities);
+
         return "index";
     }
 
@@ -76,16 +76,9 @@ public class MainController {
         return "redirect:/";
     }
 
-        @DeleteMapping("/delete")
-        public String deleteLocation(@RequestParam("locationId") Long locationId) {
-            System.out.println("DELETE method called with locationId: " + locationId);
-            locationService.deleteById(locationId);
-            return "redirect:/";
-        }
-
-    @PostMapping("/delete")
-    public String deleteLocationPost(@RequestParam("locationId") Long locationId) {
-        System.out.println("POST method called with locationId: " + locationId);
+    @DeleteMapping("/delete")
+    public String deleteLocation(@RequestParam("locationId") Long locationId) {
+        System.out.println("DELETE method called with locationId: " + locationId);
         locationService.deleteById(locationId);
         return "redirect:/";
     }

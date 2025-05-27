@@ -1,8 +1,7 @@
-package com.runaumov.spring;
+package com.runaumov.spring.advice;
 
 import com.runaumov.spring.exception.*;
 import com.runaumov.spring.utils.CookieUtil;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
