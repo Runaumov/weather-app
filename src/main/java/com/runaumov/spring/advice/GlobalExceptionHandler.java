@@ -4,6 +4,8 @@ import com.runaumov.spring.exception.*;
 import com.runaumov.spring.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler ({IllegalArgumentException.class, SessionNotFoundException.class})
     public String handleSessionNotFound (
@@ -24,21 +28,31 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({UserNotFoundException.class})
     public ModelAndView handleUserNotFound(UserNotFoundException exception) {
+        logger.warn("UserNotFoundException: {}", exception.getMessage(), exception);
         return buildErrorPage(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
-    @ExceptionHandler({AuthenticationFailedException.class}) // TODO: наверное стоит по-другому обработать это исключение, не через дефолтную страницу
+    @ExceptionHandler({AuthenticationFailedException.class})
     public ModelAndView authenticationFailed(AuthenticationFailedException exception) {
+        logger.warn("AuthenticationFailedException: {}", exception.getMessage(), exception);
         return buildErrorPage(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
-    @ExceptionHandler({RegistrationFailedException.class}) // TODO: наверное стоит по-другому обработать это исключение, не через дефолтную страницу
+    @ExceptionHandler({RegistrationFailedException.class})
     public ModelAndView registrationFailed(RegistrationFailedException exception) {
+        logger.warn("RegistrationFailedException: {}", exception.getMessage(), exception);
         return buildErrorPage(HttpStatus.CONFLICT, exception.getMessage());
     }
 
     @ExceptionHandler({WeatherApiException.class})
     public ModelAndView handleWeatherApiError(WeatherApiException exception) {
+        logger.warn("WeatherApiException: {}", exception.getMessage(), exception);
+        return buildErrorPage(HttpStatus.BAD_GATEWAY, exception.getMessage());
+    }
+
+    @ExceptionHandler({WeatherApiRequestException.class})
+    public ModelAndView weatherApiRequestError(WeatherApiRequestException exception) {
+        logger.warn("WeatherApiException: {}", exception.getMessage(), exception);
         return buildErrorPage(HttpStatus.BAD_GATEWAY, exception.getMessage());
     }
 

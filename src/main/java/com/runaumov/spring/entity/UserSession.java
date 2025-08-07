@@ -18,7 +18,7 @@ import java.util.UUID;
 public class UserSession {
 
     @Id
-    @Column(name = "ID", columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    @Column(name = "ID", columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)

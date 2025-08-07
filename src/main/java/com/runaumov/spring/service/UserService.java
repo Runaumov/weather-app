@@ -34,10 +34,10 @@ public class UserService {
                 .orElseThrow(() -> new AuthenticationFailedException("Неверный логин или пароль"));
     }
 
-    public UserAuthenticatedDto registerNewUser(UserDto userDto) { //TODO : mb need return login/id/void
+    public UserAuthenticatedDto registerNewUser(UserDto userDto) {
         Optional<User> existingUser = userDao.findByUsername(userDto.getLogin());
         if (existingUser.isPresent()) {
-            throw new RegistrationFailedException("Пользователь уже существует и не можеь быть заново зарегестрирован!");
+            throw new RegistrationFailedException("Пользователь уже существует и не может быть заново зарегестрирован!");
         }
 
         User userToSave = User.builder()

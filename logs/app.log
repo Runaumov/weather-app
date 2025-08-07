@@ -1,0 +1,3 @@
+[2025-05-27 20:32:57] [DEBUG] [com.runaumov.spring.LogTest] - Debug log example
+[2025-05-27 20:32:57] [INFO ] [com.runaumov.spring.LogTest] - Info log example
+[2025-05-27 20:32:57] [ERROR] [com.runaumov.spring.LogTest] - Error log example

@@ -1,6 +1,7 @@
 package com.runaumov.spring.api;
 
 import com.runaumov.spring.dto.LocationDto;
+import com.runaumov.spring.exception.WeatherApiRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.net.URI;
@@ -28,10 +29,10 @@ public class WeatherApiClient {
             if (response.statusCode() == 200 ) {
                 return response.body();
             } else {
-                throw new RuntimeException("getCityJson error 1"); // TODO
+                throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));
             }
         } catch (Exception e) {
-            throw new RuntimeException("getCityJson error 2"); // TODO
+            throw new WeatherApiRequestException("Ошибка при взаимодействии с внешним API");
         }
     }
 
@@ -41,15 +42,14 @@ public class WeatherApiClient {
                     WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, UNIT_OF_MEASUREMENT, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
-            // TODO : дублирование кода
             if (response.statusCode() == 200 ) {
                 return response.body();
             } else {
-                throw new RuntimeException("456"); // TODO
+                throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("567"); // TODO
+            throw new WeatherApiRequestException("Ошибка при взаимодействии с внешним API");
         }
     }
 

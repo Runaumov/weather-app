@@ -38,7 +38,6 @@ public class LoginController {
             @ModelAttribute("User") User user,
             HttpServletResponse response) {
 
-            // TODO : добавить маппинг
             UserDto userDto = new UserDto(user.getLogin(), user.getPassword());
             UserAuthenticatedDto userAuthenticatedDto = userService.getAuthenticatedUserDto(userDto);
             UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto);

@@ -1,0 +1,1 @@
+ALTER TABLE Sessions ALTER COLUMN ID TYPE uuid USING ID::uuid;

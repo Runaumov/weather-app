@@ -69,7 +69,7 @@ public class UserSessionService {
     }
 
     @Transactional
-    public Long getUserIdByUserSessionId(UUID uuid) { //TODO : check calling this method after validation session
+    public Long getUserIdByUserSessionId(UUID uuid) {
         return userSessionDao.findUserIdBySessionId(uuid)
                 .orElseThrow(() -> new SessionNotFoundException("Сессия не найдена или истекла"));
     }

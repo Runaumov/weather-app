@@ -40,9 +40,7 @@ public class UserSessionServiceIntegrationTest {
     private UserAuthenticatedDto userAuthenticatedDto;
 
     @MockitoBean
-    private WeatherApiClient weatherApiClient; // TODO : если в дальнейших тестах нужен будет weatherApiClient,
-    // то этот мок можно будет оставить. Если нет, то нужно будет что-то придумать
-    // (например, исключить этот бин из конфига). Самый лучший подход - сделать свои конфиги для каждого набора тестов
+    private WeatherApiClient weatherApiClient;
 
     @BeforeEach
     public void setup() {

@@ -20,8 +20,10 @@ public class HibernateConfig {
     @Bean
     public DataSource dataSource() {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("org.h2.Driver");
-        hikariConfig.setJdbcUrl("jdbc:h2:mem:db");
+        hikariConfig.setDriverClassName("org.postgresql.Driver");
+        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:5433/postgres");
+        hikariConfig.setUsername("postgres");
+        hikariConfig.setPassword("password");
         hikariConfig.setMaximumPoolSize(10);
 
         return new HikariDataSource(hikariConfig);
@@ -34,11 +36,9 @@ public class HibernateConfig {
         sessionFactory.setPackagesToScan("com.runaumov.spring.entity");
 
         Properties hibernateProperties = new Properties();
-        hibernateProperties.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
+        hibernateProperties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.put(Environment.SHOW_SQL, "true");
         hibernateProperties.put(Environment.FORMAT_SQL, "true");
-        hibernateProperties.put(Environment.HBM2DDL_AUTO, "create");
-        hibernateProperties.put(Environment.HBM2DDL_IMPORT_FILES, "init.sql");
 
         sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
