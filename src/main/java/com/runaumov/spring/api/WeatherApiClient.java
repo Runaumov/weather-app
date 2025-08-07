@@ -4,6 +4,7 @@ import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.exception.WeatherApiRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -17,16 +18,16 @@ public class WeatherApiClient {
     private static final String NUMBER_OF_CITIES = "5";
     private static final String EXCLUDE_PARAMETRES = "minutely,hourly,alerts";
     private static final String UNIT_OF_MEASUREMENT = "metric";
-    @Value("${weather.api.key}") private String apiKey;
-
     HttpClient client = HttpClient.newHttpClient();
+    @Value("${weather.api.key}")
+    private String apiKey;
 
     public String getCityJson(String cityName) {
         try {
             String url = String.format("%s?q=%s&limit=%s&apiKey=%s", GEOCODING_URL, cityName, NUMBER_OF_CITIES, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200 ) {
+            if (response.statusCode() == 200) {
                 return response.body();
             } else {
                 throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));
@@ -42,7 +43,7 @@ public class WeatherApiClient {
                     WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, UNIT_OF_MEASUREMENT, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200 ) {
+            if (response.statusCode() == 200) {
                 return response.body();
             } else {
                 throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));

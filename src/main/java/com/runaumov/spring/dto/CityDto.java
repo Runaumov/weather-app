@@ -14,10 +14,15 @@ import lombok.Setter;
 @Setter
 public class CityDto {
 
-    @JsonProperty("name") private String cityName;
-    @JsonProperty("country") private String country;
-    @JsonProperty("state") private String state;
-    @JsonProperty("lat") private String latitude;
-    @JsonProperty("lon") private String longitude;
+    @JsonProperty("name")
+    private String cityName;
+    @JsonProperty("country")
+    private String country;
+    @JsonProperty("state")
+    private String state;
+    @JsonProperty("lat")
+    private String latitude;
+    @JsonProperty("lon")
+    private String longitude;
 
 }

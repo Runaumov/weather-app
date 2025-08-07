@@ -25,7 +25,7 @@ public class Location {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "userId",referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
     @Column(name = "Latitude")

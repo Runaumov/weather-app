@@ -4,15 +4,17 @@ import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.entity.User;
-import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.UserService;
+import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.utils.CookieUtil;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/login")
@@ -38,11 +40,11 @@ public class LoginController {
             @ModelAttribute("User") User user,
             HttpServletResponse response) {
 
-            UserDto userDto = new UserDto(user.getLogin(), user.getPassword());
-            UserAuthenticatedDto userAuthenticatedDto = userService.getAuthenticatedUserDto(userDto);
-            UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto);
+        UserDto userDto = new UserDto(user.getLogin(), user.getPassword());
+        UserAuthenticatedDto userAuthenticatedDto = userService.getAuthenticatedUserDto(userDto);
+        UserSessionDto userSessionDto = userSessionService.createNewUserSession(userAuthenticatedDto);
 
-            CookieUtil.setSessionCookie(response, userSessionDto);
-            return "redirect:/";
+        CookieUtil.setSessionCookie(response, userSessionDto);
+        return "redirect:/";
     }
 }

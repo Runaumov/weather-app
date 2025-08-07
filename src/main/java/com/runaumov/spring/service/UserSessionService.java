@@ -12,16 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class UserSessionService {
 
+    private static final int SESSION_LIFETIME = 30;
     private final UserSessionDao userSessionDao;
     private final UserDao userDao;
-
-    private static final int SESSION_LIFETIME = 30;
 
     @Autowired
     public UserSessionService(UserDao userDao, UserSessionDao userSessionDao) {
@@ -49,7 +47,7 @@ public class UserSessionService {
     }
 
     @Transactional
-    public UserSessionDto getValidatedUserSessionDto (UUID sessionId) {
+    public UserSessionDto getValidatedUserSessionDto(UUID sessionId) {
         UserSession userSession = userSessionDao.findById(sessionId)
                 .orElseThrow(() -> new SessionNotFoundException("Session not found or expired"));
 

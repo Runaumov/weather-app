@@ -1,12 +1,12 @@
 package com.runaumov.spring.controller;
+
 import com.runaumov.spring.dto.UserAuthenticatedDto;
 import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.dto.UserRegistrationRequest;
 import com.runaumov.spring.dto.UserSessionDto;
-import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.UserService;
+import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.utils.CookieUtil;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

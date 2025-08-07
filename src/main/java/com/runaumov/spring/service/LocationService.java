@@ -8,6 +8,7 @@ import com.runaumov.spring.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,14 +42,14 @@ public class LocationService {
     @Transactional
     public List<LocationDto> getLocationDto(Long userId) {
         List<Location> locationList = locationDao.getLocationListByUserId(userId);
-            return locationList.stream()
-                    .map(location -> new LocationDto(
-                            location.getId(),
-                            location.getUser().getId(),
-                            location.getName(),
-                            location.getLatitude(),
-                            location.getLongitude()))
-                    .collect(Collectors.toList());
+        return locationList.stream()
+                .map(location -> new LocationDto(
+                        location.getId(),
+                        location.getUser().getId(),
+                        location.getName(),
+                        location.getLatitude(),
+                        location.getLongitude()))
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,10 +1,6 @@
 package com.runaumov.spring.controller;
 
-import com.runaumov.spring.dto.CityNameRequest;
-import com.runaumov.spring.dto.LocationRequest;
-import com.runaumov.spring.dto.LocationDto;
-import com.runaumov.spring.dto.WeatherDto;
-import com.runaumov.spring.dto.CityDto;
+import com.runaumov.spring.dto.*;
 import com.runaumov.spring.service.LocationService;
 import com.runaumov.spring.service.UserSessionService;
 import com.runaumov.spring.service.WeatherService;
@@ -62,7 +58,7 @@ public class MainController {
     @PostMapping("/add")
     public String addLocation(
             @ModelAttribute LocationRequest locationRequest,
-            @CookieValue (value = "SESSION_TOKEN", required = false) String sessionToken) {
+            @CookieValue(value = "SESSION_TOKEN", required = false) String sessionToken) {
 
         LocationDto locationDto = new LocationDto(
                 userSessionService.getUserIdByUserSessionId(UUID.fromString(sessionToken)),

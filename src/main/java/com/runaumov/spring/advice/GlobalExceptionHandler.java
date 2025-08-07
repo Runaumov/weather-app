@@ -16,8 +16,8 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler ({IllegalArgumentException.class, SessionNotFoundException.class})
-    public String handleSessionNotFound (
+    @ExceptionHandler({IllegalArgumentException.class, SessionNotFoundException.class})
+    public String handleSessionNotFound(
             SessionNotFoundException exception,
             HttpServletRequest request,
             HttpServletResponse response

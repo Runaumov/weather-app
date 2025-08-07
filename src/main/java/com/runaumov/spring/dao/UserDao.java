@@ -1,10 +1,11 @@
 package com.runaumov.spring.dao;
 
 import com.runaumov.spring.entity.User;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
 @Repository
@@ -26,8 +27,8 @@ public class UserDao {
     public Optional<User> findByUsername(String login) {
         Session session = sessionFactory.getCurrentSession();
         User user = session.createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
-                    .setParameter("login", login)
-                    .uniqueResult();
+                .setParameter("login", login)
+                .uniqueResult();
         return Optional.ofNullable(user);
     }
 
@@ -39,8 +40,8 @@ public class UserDao {
     public Optional<User> findById(Long id) {
         Session session = sessionFactory.getCurrentSession();
         User user = session.createQuery("SELECT u FROM User u WHERE u.id = :id", User.class)
-                    .setParameter("id", id)
-                    .uniqueResult();
+                .setParameter("id", id)
+                .uniqueResult();
         return Optional.ofNullable(user);
     }
 
