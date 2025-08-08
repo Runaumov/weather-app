@@ -4,7 +4,7 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL
 );
 
-  CREATE TABLE Locations (
+CREATE TABLE Locations (
     ID BIGSERIAL PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     userId BIGINT NOT NULL,
