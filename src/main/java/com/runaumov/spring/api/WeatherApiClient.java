@@ -13,18 +13,24 @@ import java.net.http.HttpResponse;
 @Component
 public class WeatherApiClient {
 
-    private static final String GEOCODING_URL = "http://api.openweathermap.org/geo/1.0/direct";
-    private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
-    private static final String NUMBER_OF_CITIES = "5";
-    private static final String EXCLUDE_PARAMETRES = "minutely,hourly,alerts";
-    private static final String UNIT_OF_MEASUREMENT = "metric";
-    HttpClient client = HttpClient.newHttpClient();
+    @Value("${weather.api.geocoding.url}")
+    private String geocodingUrl;
+    @Value("${weather.api.current.url}")
+    private String weatherUrl;
+    @Value("${weather.api.geocoding.limit}")
+    private int numberOfCities;
+    @Value("${weather.api.exclude.parameters}")
+    private String excludeParametres;
+    @Value("${weather.api.units}")
+    private String unitOfMeasurement;
     @Value("${weather.api.key}")
     private String apiKey;
 
+    HttpClient client = HttpClient.newHttpClient();
+
     public String getCityJson(String cityName) {
         try {
-            String url = String.format("%s?q=%s&limit=%s&apiKey=%s", GEOCODING_URL, cityName, NUMBER_OF_CITIES, apiKey);
+            String url = String.format("%s?q=%s&limit=%s&apiKey=%s", geocodingUrl, cityName, numberOfCities, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
@@ -40,7 +46,7 @@ public class WeatherApiClient {
     public String getWeatherJson(LocationDto locationDto) {
         try {
             String url = String.format("%s?lat=%s&lon=%s&exclude=%s&units=%s&apiKey=%s",
-                    WEATHER_URL, locationDto.getLatitude(), locationDto.getLongitude(), EXCLUDE_PARAMETRES, UNIT_OF_MEASUREMENT, apiKey);
+                    weatherUrl, locationDto.getLatitude(), locationDto.getLongitude(), excludeParametres, unitOfMeasurement, apiKey);
             HttpResponse<String> response = client.send(getRequest(url), HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
