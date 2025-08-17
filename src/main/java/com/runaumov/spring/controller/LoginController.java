@@ -6,7 +6,7 @@ import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.service.UserService;
 import com.runaumov.spring.service.UserSessionService;
-import com.runaumov.spring.dao.utils.CookieUtil;
+import com.runaumov.spring.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

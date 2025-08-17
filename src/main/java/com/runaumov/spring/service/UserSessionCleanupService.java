@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Service
 public class UserSessionCleanupService {
 
-    private static final long CLEANUP_RATE_MS = 30 * 60 * 1000;
-
     private final UserSessionDao userSessionDao;
 
     @Autowired
@@ -20,7 +18,7 @@ public class UserSessionCleanupService {
         this.userSessionDao = userSessionDao;
     }
 
-    @Scheduled(fixedRate = CLEANUP_RATE_MS)
+    @Scheduled(fixedRateString = "${cleanup.rate.ms:1800000}")
     @Transactional
     public void removeExpiredSessions() {
         LocalDateTime now = LocalDateTime.now();
