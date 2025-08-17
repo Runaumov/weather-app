@@ -14,18 +14,18 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "Sessions")
+@Table(name = "sessions")
 public class UserSession {
 
     @Id
-    @Column(name = "ID", columnDefinition = "uuid", updatable = false, nullable = false)
+    @Column(name = "session_id", columnDefinition = "uuid", updatable = false, nullable = false)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @Column(name = "ExpiresAt")
+    @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
 }

@@ -6,7 +6,7 @@ import com.runaumov.spring.dto.UserSessionDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.service.UserService;
 import com.runaumov.spring.service.UserSessionService;
-import com.runaumov.spring.utils.CookieUtil;
+import com.runaumov.spring.dao.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,9 +36,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public String loginUser(
-            @ModelAttribute("User") User user,
-            HttpServletResponse response) {
+    public String loginUser(@ModelAttribute("User") User user, HttpServletResponse response) {
 
         UserDto userDto = new UserDto(user.getLogin(), user.getPassword());
         UserAuthenticatedDto userAuthenticatedDto = userService.getAuthenticatedUserDto(userDto);

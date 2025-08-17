@@ -43,9 +43,7 @@ public class MainController {
     }
 
     @PostMapping("/search")
-    public String getWeatherCards(
-            @RequestParam("cityName") String cityName,
-            Model model) {
+    public String getWeatherCards(@RequestParam("cityName") String cityName, Model model) {
 
         CityNameRequest cityNameRequest = new CityNameRequest(cityName);
         List<CityDto> cities = weatherService.getCitiesList(cityNameRequest);

@@ -168,6 +168,20 @@
         <target>21</target>
       </configuration>
     </plugin>
+      <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+        <version>11.10.5</version>
+        <configuration>
+          <url>jdbc:postgresql://localhost:5433/postgres</url>
+          <user>postgres</user>
+          <password>password</password>
+          <cleanDisabled>false</cleanDisabled>
+          <schemas>
+            <schema>public</schema>
+          </schemas>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

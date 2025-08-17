@@ -28,9 +28,7 @@ public class WeatherService {
     }
 
     public List<CityDto> getCitiesList(CityNameRequest cityNameRequest) {
-        return parseJson(
-                weatherApiClient.getCityJson(cityNameRequest.getCityName()),
-                new TypeReference<List<CityDto>>() {
+        return parseJson(weatherApiClient.getCityJson(cityNameRequest.getCityName()), new TypeReference<List<CityDto>>() {
                 });
     }
 

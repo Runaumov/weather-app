@@ -1,4 +1,4 @@
-package com.runaumov.spring.utils;
+package com.runaumov.spring.dao.utils;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 

@@ -9,18 +9,18 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "Login", unique = true, nullable = false)
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(name = "Password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
 }

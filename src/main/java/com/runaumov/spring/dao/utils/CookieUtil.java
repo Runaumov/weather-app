@@ -1,4 +1,4 @@
-package com.runaumov.spring.utils;
+package com.runaumov.spring.dao.utils;
 
 import com.runaumov.spring.dto.UserSessionDto;
 import jakarta.servlet.http.Cookie;

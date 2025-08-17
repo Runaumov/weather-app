@@ -13,25 +13,25 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "Locations")
+@Table(name = "locations")
 public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "location_id")
     private Long id;
 
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @Column(name = "Latitude")
+    @Column(name = "latitude")
     private BigDecimal latitude;
 
-    @Column(name = "Longitude")
+    @Column(name = "longitude")
     private BigDecimal longitude;
 
     public Location(String name, User user, BigDecimal latitude, BigDecimal longitude) {

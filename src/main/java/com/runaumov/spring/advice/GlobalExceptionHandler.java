@@ -1,8 +1,7 @@
 package com.runaumov.spring.advice;
 
 import com.runaumov.spring.exception.*;
-import com.runaumov.spring.utils.CookieUtil;
-import jakarta.servlet.http.HttpServletRequest;
+import com.runaumov.spring.dao.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +17,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({IllegalArgumentException.class, SessionNotFoundException.class})
     public String handleSessionNotFound(
-            SessionNotFoundException exception,
-            HttpServletRequest request,
             HttpServletResponse response
     ) {
         CookieUtil.deleteCookie(response);

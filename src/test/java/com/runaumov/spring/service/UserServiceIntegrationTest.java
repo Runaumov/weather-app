@@ -9,7 +9,7 @@ import com.runaumov.spring.dto.UserDto;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.exception.AuthenticationFailedException;
 import com.runaumov.spring.exception.RegistrationFailedException;
-import com.runaumov.spring.utils.PasswordUtil;
+import com.runaumov.spring.dao.utils.PasswordUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
