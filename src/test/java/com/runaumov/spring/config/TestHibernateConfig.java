@@ -35,7 +35,6 @@ public class TestHibernateConfig {
         hibernateProperties.put(Environment.SHOW_SQL, "true");
         hibernateProperties.put(Environment.FORMAT_SQL, "true");
         hibernateProperties.put(Environment.HBM2DDL_AUTO, "create");
-        //hibernateProperties.put(Environment.HBM2DDL_IMPORT_FILES, "init.sql");
         sessionFactory.setHibernateProperties(hibernateProperties);
         return sessionFactory;
     }
