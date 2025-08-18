@@ -2,6 +2,7 @@ package com.runaumov.spring.api;
 
 import com.runaumov.spring.dto.LocationDto;
 import com.runaumov.spring.exception.WeatherApiRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,12 @@ public class WeatherApiClient {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client;
+
+    @Autowired
+    public WeatherApiClient(HttpClient client) {
+        this.client = client;
+    }
 
     public String getCityJson(String cityName) {
         try {
