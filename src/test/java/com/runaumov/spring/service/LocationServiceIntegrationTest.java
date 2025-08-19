@@ -7,6 +7,7 @@ import com.runaumov.spring.config.TestServiceConfig;
 import com.runaumov.spring.dao.LocationDao;
 import com.runaumov.spring.dao.UserDao;
 import com.runaumov.spring.dto.LocationDto;
+import com.runaumov.spring.dto.WeatherDto;
 import com.runaumov.spring.entity.Location;
 import com.runaumov.spring.entity.User;
 import com.runaumov.spring.exception.UserNotFoundException;
@@ -49,8 +50,14 @@ public class LocationServiceIntegrationTest {
         testUser.setPassword("testPassword");
         userDao.save(testUser);
 
-        when(weatherApiClient.getWeatherJson(any()))
-                .thenReturn("{\"weather\": \"sunny\"}");
+        WeatherDto mockWeather = new WeatherDto();
+        mockWeather.setCity("Moscow");
+        mockWeather.setCoord(new WeatherDto.Coord("55.7558", "37.6173"));
+        mockWeather.setMain(new WeatherDto.Main("20.0", "1013"));
+        mockWeather.setSys(new WeatherDto.Sys("RU"));
+
+        when(weatherApiClient.getWeatherDto(any()))
+                .thenReturn(mockWeather);
     }
 
     @Test

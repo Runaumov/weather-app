@@ -6,6 +6,7 @@ import com.runaumov.spring.config.TestHibernateConfig;
 import com.runaumov.spring.config.TestServiceConfig;
 import com.runaumov.spring.dto.CityDto;
 import com.runaumov.spring.dto.CityNameRequest;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +37,7 @@ public class WeatherServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        weatherService = new WeatherService(objectMapper, weatherApiClient);
+        weatherService = new WeatherService(weatherApiClient);
     }
 
     @Test
@@ -44,7 +45,9 @@ public class WeatherServiceIntegrationTest {
         String citiesJson = "[{\"name\":\"Moscow\",\"country\":\"Russia\",\"lat\":55.7558,\"lon\":37.6173}]";
         CityNameRequest request = new CityNameRequest("Moscow");
 
-        when(weatherApiClient.getCityJson("Moscow")).thenReturn(citiesJson);
+        List<CityDto> mockCitiesList = List.of(new CityDto("Moscow", "Russia", null, "55.7558", "37.6173"));
+
+        when(weatherApiClient.getCitiesList("Moscow")).thenReturn(mockCitiesList);
         List<CityDto> result = weatherService.getCitiesList(request);
 
         assertEquals(1, result.size());
