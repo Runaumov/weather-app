@@ -1,6 +1,5 @@
 package com.runaumov.spring.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.runaumov.spring.dto.CityDto;
 import com.runaumov.spring.dto.LocationDto;
@@ -9,13 +8,12 @@ import com.runaumov.spring.exception.WeatherApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -34,13 +32,11 @@ public class WeatherApiClient {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    private final HttpClient client;
-    private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public WeatherApiClient(HttpClient client, ObjectMapper objectMapper) {
-        this.client = client;
-        this.objectMapper = objectMapper;
+    public WeatherApiClient(RestTemplate restTemplate, HttpClient client, ObjectMapper objectMapper) {
+        this.restTemplate = restTemplate;
     }
 
     public List<CityDto> getCitiesList(String cityName) {
@@ -54,14 +50,9 @@ public class WeatherApiClient {
                     .build()
                     .toUri();
 
-            HttpResponse<String> response = client.send(getRequest(uri), HttpResponse.BodyHandlers.ofString());
+            CityDto[] cityDtoList = restTemplate.getForObject(uri, CityDto[].class);
+            return cityDtoList != null ? Arrays.asList(cityDtoList) : Collections.emptyList();
 
-            if (response.statusCode() == 200) {
-                return objectMapper.readValue(response.body(), new TypeReference<List<CityDto>>() {
-                });
-            } else {
-                throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));
-            }
         } catch (Exception e) {
             throw new WeatherApiRequestException("Ошибка при взаимодействии с внешним API");
         }
@@ -80,27 +71,18 @@ public class WeatherApiClient {
                     .build()
                     .toUri();
 
-            HttpResponse<String> response = client.send(getRequest(uri), HttpResponse.BodyHandlers.ofString());
+            WeatherDto weatherDto = restTemplate.getForObject(uri, WeatherDto.class);
 
-            if (response.statusCode() == 200) {
-                WeatherDto weatherDto = objectMapper.readValue(response.body(), WeatherDto.class);
+            if (weatherDto != null) {
                 weatherDto.setCity(locationDto.getName());
                 weatherDto.setLocationId(locationDto.getLocationId());
-                return weatherDto;
-            } else {
-                throw new WeatherApiRequestException(String.format("Ошибка при взаимодействии с внешним API, код ответа внешенего сервера:%S", response.statusCode()));
             }
+
+            return weatherDto;
 
         } catch (Exception e) {
             throw new WeatherApiRequestException("Ошибка при взаимодействии с внешним API");
         }
-    }
-
-    private HttpRequest getRequest(URI uri) {
-        return HttpRequest.newBuilder()
-                .uri(uri)
-                .GET()
-                .build();
     }
 
 }
