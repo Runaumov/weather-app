@@ -28,6 +28,8 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 @PropertySource("classpath:application.properties")
 @EnableScheduling
 @EnableWebMvc
+@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-secret.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
