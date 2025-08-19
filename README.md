@@ -29,18 +29,25 @@
 
 
 ## Запуск приложения
-- Получить API-ключ на openweathermap.org и положить его сюда: src/main/resources/application.properties с параметром weather.api.key
-- С помощью Docker:
+- Клонировать репозиторий;
+- Получить API-ключ на openweathermap.org и положить его сюда: src/main/resources/application-secret.properties с параметром weather.api.key
+- С помощью Docker Compose:
   - Соберите контейнер:
     ```bash
-    docker build -t weather-app .
+    docker-compose build
     ```
   - Запустите контейнер:
     ```bash
-    docker run -p 8080:8080 weather-app
+    docker-compose up
     ```
   - Адрес приложения: `http://localhost:8080/`
  - С помощью IDEA:
-   - клонировать репозиторий;
    - поднять Docker-контейнер с PostgreSQL и запустить его: https://hub.docker.com/_/postgres
+   - в application.properties указать параметры вашей БД:
+```application.properties
+db.driver.class.name=
+db.jdbc.url=
+db.username=
+db.password=
+```
    - запустить в IDEA через Tomcat.
