@@ -20,11 +20,13 @@ public class UserSessionService {
     private static final int SESSION_LIFETIME = 30;
     private final UserSessionDao userSessionDao;
     private final UserDao userDao;
+    private final UserSessionCleanupService userSessionCleanupService;
 
     @Autowired
-    public UserSessionService(UserDao userDao, UserSessionDao userSessionDao) {
+    public UserSessionService(UserDao userDao, UserSessionDao userSessionDao, UserSessionCleanupService userSessionCleanupService) {
         this.userDao = userDao;
         this.userSessionDao = userSessionDao;
+        this.userSessionCleanupService = userSessionCleanupService;
     }
 
     @Transactional
@@ -55,7 +57,8 @@ public class UserSessionService {
         boolean isExpired = userSession.getExpiresAt().isBefore(timeNow);
 
         if (isExpired) {
-            handleExpiredSession(userSession);
+            userSessionCleanupService.deleteExpiredSession(userSession);
+            throw new SessionNotFoundException("Сессия истекла");
         }
 
         return UserSessionDto.builder()
@@ -77,11 +80,10 @@ public class UserSessionService {
         userSessionDao.deleteById(uuid);
     }
 
-    @Transactional
-    protected void handleExpiredSession(UserSession userSession) {
-        userSessionDao.delete(userSession);
-        throw new SessionNotFoundException("Сессия истекла");
-    }
+//    @Transactional
+//    protected void handleExpiredSession(UserSession userSession) {
+//        userSessionDao.delete(userSession);
+//    }
 
     private LocalDateTime generateExpiresAt() {
         return LocalDateTime.now().plusMinutes(SESSION_LIFETIME);

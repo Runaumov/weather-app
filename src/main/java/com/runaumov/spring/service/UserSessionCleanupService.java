@@ -1,6 +1,7 @@
 package com.runaumov.spring.service;
 
 import com.runaumov.spring.dao.UserSessionDao;
+import com.runaumov.spring.entity.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,14 @@ public class UserSessionCleanupService {
         this.userSessionDao = userSessionDao;
     }
 
+    @Transactional
+    public void deleteExpiredSession(UserSession userSession) {
+        userSessionDao.delete(userSession);
+    }
+
     @Scheduled(fixedRateString = "${cleanup.rate.ms:1800000}")
     @Transactional
-    public void removeExpiredSessions() {
+    public void cleanupExpiredSessions() {
         LocalDateTime now = LocalDateTime.now();
         userSessionDao.deleteExpiredUserSessions(now);
     }

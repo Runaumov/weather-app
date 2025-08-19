@@ -72,7 +72,7 @@ public class UserSessionCleanupServiceIntegrationTest {
         userSessionDao.save(expiredSession);
         userSessionDao.save(validSession);
 
-        userSessionCleanupService.removeExpiredSessions();
+        userSessionCleanupService.cleanupExpiredSessions();
 
         Optional<UserSession> expiredUserSessionOptional = userSessionDao.findById(expiredSession.getId());
         assertTrue(expiredUserSessionOptional.isEmpty());
