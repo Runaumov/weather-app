@@ -35,7 +35,7 @@ public class WeatherApiClient {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public WeatherApiClient(RestTemplate restTemplate, HttpClient client, ObjectMapper objectMapper) {
+    public WeatherApiClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

@@ -48,7 +48,7 @@ public class UserSessionService {
                 .build();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserSessionDto getValidatedUserSessionDto(UUID sessionId) {
         UserSession userSession = userSessionDao.findById(sessionId)
                 .orElseThrow(() -> new SessionNotFoundException("Session not found or expired"));
@@ -69,7 +69,7 @@ public class UserSessionService {
                 .build();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getUserIdByUserSessionId(UUID uuid) {
         return userSessionDao.findUserIdBySessionId(uuid)
                 .orElseThrow(() -> new SessionNotFoundException("Сессия не найдена или истекла"));
@@ -79,11 +79,6 @@ public class UserSessionService {
     public void removeSession(UUID uuid) {
         userSessionDao.deleteById(uuid);
     }
-
-//    @Transactional
-//    protected void handleExpiredSession(UserSession userSession) {
-//        userSessionDao.delete(userSession);
-//    }
 
     private LocalDateTime generateExpiresAt() {
         return LocalDateTime.now().plusMinutes(SESSION_LIFETIME);

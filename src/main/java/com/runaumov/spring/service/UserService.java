@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional
 @Service
 public class UserService {
 
@@ -24,6 +23,7 @@ public class UserService {
         this.userDao = userDao;
     }
 
+    @Transactional(readOnly = true)
     public UserAuthenticatedDto getAuthenticatedUserDto(UserDto userDto) {
         String login = userDto.getLogin();
         String password = userDto.getPassword();
@@ -34,6 +34,7 @@ public class UserService {
                 .orElseThrow(() -> new AuthenticationFailedException("Неверный логин или пароль"));
     }
 
+    @Transactional
     public UserAuthenticatedDto registerNewUser(UserDto userDto) {
         Optional<User> existingUser = userDao.findByUsername(userDto.getLogin());
         if (existingUser.isPresent()) {

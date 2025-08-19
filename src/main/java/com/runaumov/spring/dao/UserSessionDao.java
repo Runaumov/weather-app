@@ -57,7 +57,7 @@ public class UserSessionDao {
 
     public Optional<Long> findUserIdBySessionId(UUID uuid) {
         Session session = sessionFactory.getCurrentSession();
-        UserSession userSession = session.createQuery("SELECT us FROM UserSession us WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
+        UserSession userSession = session.createQuery("SELECT us FROM UserSession us JOIN FETCH us.user WHERE us.id = :uuid ORDER BY us.expiresAt DESC", UserSession.class)
                 .setParameter("uuid", uuid)
                 .setMaxResults(1)
                 .uniqueResult();
