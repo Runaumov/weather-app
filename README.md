@@ -32,11 +32,11 @@
 - Клонировать репозиторий;
 - Получить API-ключ на openweathermap.org и положить его сюда: src/main/resources/application-secret.properties с параметром weather.api.key
 - С помощью Docker Compose:
-  - Соберите контейнер:
+  - Соберите контейнеры:
     ```bash
     docker-compose build
     ```
-  - Запустите контейнер:
+  - Запустите контейнеры:
     ```bash
     docker-compose up
     ```
