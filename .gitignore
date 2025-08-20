@@ -4,7 +4,6 @@ target/
 !**/src/test/**/target/
 /src/main/resources/application-secret.properties
 .gitignore
-/certs/
 
 ### IntelliJ IDEA ###
 .idea/
