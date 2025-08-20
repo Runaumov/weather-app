@@ -2,7 +2,6 @@ package com.runaumov.spring.advice;
 
 import com.runaumov.spring.exception.*;
 import com.runaumov.spring.utils.CookieUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

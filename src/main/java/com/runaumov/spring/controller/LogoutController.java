@@ -34,7 +34,7 @@ public class LogoutController {
             Cookie cookie = new Cookie("SESSION_TOKEN", "");
             cookie.setMaxAge(0);
             cookie.setPath("/");
-            cookie.setSecure(true);
+            cookie.setSecure(false);
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
         }
