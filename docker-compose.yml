@@ -14,10 +14,21 @@ services:
 
   app:
     build: .
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     depends_on:
       - db
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
 
 volumes:
   pgdata:
