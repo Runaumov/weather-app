@@ -12,11 +12,11 @@ public class CookieUtil {
 
         Cookie sessionCookie = new Cookie("SESSION_TOKEN", sessionToken);
         sessionCookie.setHttpOnly(true);
-        sessionCookie.setSecure(false);
+        sessionCookie.setSecure(true);
         sessionCookie.setPath("/");
 
         Cookie usernameCookie = new Cookie("username", username);
-        usernameCookie.setSecure(false);
+        usernameCookie.setSecure(true);
         usernameCookie.setPath("/");
 
         response.addCookie(sessionCookie);
